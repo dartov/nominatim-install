@@ -59,7 +59,7 @@ if [ -n "${planetUrl}" ]; then
 
 else
     # Options for a Geofabrik Extract
-    osmdatafilename=${osmdatacountry}-latest.osm.pbf
+    osmdatafilename=${osmdatacountry}.osm.pbf
     osmdataurl=${geofabrikUrl}${osmdatafolder}${osmdatafilename}
     osmupdates=${geofabrikUrl}${osmdatafolder}${osmdatacountry}-updates
 fi
@@ -245,18 +245,6 @@ cat > ${localNominatimSettings} << EOF
    @define('CONST_Website_BaseURL', 'http://${websiteurl}/');
 EOF
 
-# By default, Nominatim is configured to update using the global minutely diffs
-if [ -z "${planetUrl}" ]; then
-
-    # When using GeoFabrik extracts append these lines to set up the update process
-    cat >> ${localNominatimSettings} << EOF
-   // Setting up the update process
-   @define('CONST_Replication_Url', '${osmupdates}');
-   @define('CONST_Replication_MaxInterval', '86400');     // Process each update separately, osmosis cannot merge multiple updates
-   @define('CONST_Replication_Update_Interval', '86400');  // How often upstream publishes diffs
-   @define('CONST_Replication_Recheck_Interval', '900');   // How long to sleep if no update found yet
-EOF
-fi
 
 # Change settings file to Nominatim ownership
 chown ${username}:${username} ${localNominatimSettings}
