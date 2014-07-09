@@ -1,0 +1,19 @@
+*** Nominatim/utils/setup.php	Wed Jul  9 04:10:49 2014
+--- Nominatim/utils/setup.php	Wed Jul  9 04:14:56 2014
+***************
+*** 190,196 ****
+  		{
+  			$osm2pgsql .= ' --flat-nodes '.CONST_Osm2pgsql_Flatnode_File;
+  		}
+! 		$osm2pgsql .= ' -lsc -O gazetteer --hstore';
+  		$osm2pgsql .= ' -C '.$iCacheMemory;
+  		$osm2pgsql .= ' -P '.$aDSNInfo['port'];
+  		$osm2pgsql .= ' -d '.$aDSNInfo['database'].' '.$aCMDResult['osm-file'];
+--- 190,196 ----
+  		{
+  			$osm2pgsql .= ' --flat-nodes '.CONST_Osm2pgsql_Flatnode_File;
+  		}
+! 		$osm2pgsql .= ' -lsc -O gazetteer --hstore --cache-strategy sparse';
+  		$osm2pgsql .= ' -C '.$iCacheMemory;
+  		$osm2pgsql .= ' -P '.$aDSNInfo['port'];
+  		$osm2pgsql .= ' -d '.$aDSNInfo['database'].' '.$aCMDResult['osm-file'];
