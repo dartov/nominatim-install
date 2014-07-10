@@ -38,7 +38,7 @@ nominatimVHfile=400-nominatim.conf
 geofabrikUrl=http://data.gis-lab.info/
 
 osmdatafolder=osm_dump/dump/latest/
-osmdatacountry=RU-MOW
+osmdatacountry=RU
 
 postgresconfigmode=oltp
 override_maintenance_work_mem=

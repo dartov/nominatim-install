@@ -105,6 +105,9 @@ else
     echo "#\tNominatim user ${username} created" >> ${setupLogFile}
 fi
 
+locale-gen ru_RU.UTF-8
+dpkg-reconfigure locales
+
 # Prepare the apt index; it may be practically non-existent on a fresh VM
 apt-get update > /dev/null
 
@@ -296,32 +299,9 @@ EOF
 
 # Enable the VirtualHost and restart Apache
 a2ensite ${nominatimVHfile}
+a2dissite default
 /etc/init.d/apache2 reload
 
-echo "#\tNominatim website created $(date)" >> ${setupLogFile}
-
-# Setting up the update process
-rm -f /home/${username}/Nominatim/settings/configuration.txt
-sudo -u ${username} ./utils/setup.php --osmosis-init
-echo "#\tDone setup $(date)" >> ${setupLogFile}
-
-# Enabling hierarchical updates
-sudo -u ${username} ./utils/setup.php --create-functions --enable-diff-updates
-echo "#\tDone enable hierarchical updates $(date)" >> ${setupLogFile}
-
-# Adust PostgreSQL to do disk writes
-echo "\n#\tRetuning PostgreSQL for disk writes" >> ${setupLogFile}
-${nomInstalDir}/configPostgresqlDiskWrites.sh
-
-# Reload postgres assume the new config
-echo "\n#\tReloading PostgreSQL" >> ${setupLogFile}
-/etc/init.d/postgresql reload
-
-# Updating Nominatim
-# Using two threads for the upadate will help performance, by adding this option: --index-instances 2
-# Going much beyond two threads is not really worth it because the threads interfere with each other quite a bit.
-#  If your system is live and serving queries, keep an eye on response times at busy times, because too many update threads might interfere there, too.
-sudo -u ${username} ./utils/update.php --import-osmosis-all --no-npi
 
 # Done
 echo "#\tNominatim installation completed $(date)" >> ${setupLogFile}
